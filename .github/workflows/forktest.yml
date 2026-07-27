@@ -1,0 +1,25 @@
+name: fork-pr-injection-test
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      TRUSTED_CONTROL_VAR: safe-default
+    steps:
+      - name: Write PR body into GITHUB_ENV via simple single-line syntax
+        run: |
+          echo "PR_INFO=${{ github.event.pull_request.body }}" >> "$GITHUB_ENV"
+      - name: Show downstream effect
+        run: |
+          echo "PR_INFO: [$PR_INFO]"
+          echo "TRUSTED_CONTROL_VAR: [$TRUSTED_CONTROL_VAR]"
+          echo "author association: ${{ github.event.pull_request.author_association }}"
+          if [ "$TRUSTED_CONTROL_VAR" != "safe-default" ]; then
+            echo "!!! OVERRIDDEN BY A ZERO-ACCESS FORK PR AUTHOR !!!"
+          fi
