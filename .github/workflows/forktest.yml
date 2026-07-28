@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "!!! THIS STEP WAS GATED BEHIND an if: CONDITION AND RAN ANYWAY !!!"
           echo "This step stands in for a real privileged action (e.g. a deploy step, or a step guarded 'only run for trusted context')."
-      - name: CONTROL STEP - should always run, sanity check the if: mechanism itself works
+      - name: CONTROL STEP - should always run, sanity check the if-condition mechanism itself works
         if: env.TRUSTED_CONTROL_VAR == 'this-will-never-match-anything'
         run: |
           echo "this should never print"
